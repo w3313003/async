@@ -23,7 +23,20 @@ function* generator() {
     const file5 = yield readFile(path.join(__dirname, '1.txt'));
     console.log(file5)
 };
-const iter = generator();
+// 手动调用
+// const iter = generator();
+// iter.next().value.then(res => {
+//     iter.next(res).value.then(res => {
+//         iter.next(res).value.then(res => {
+//             iter.next(res).value.then(res => {
+//                 iter.next(res).value.then(res => {
+//                     iter.next(res)
+//                 })
+//             })
+//         })
+//     })
+// })
+
 function runGen(gen) {
     const iter = gen();
     function next(data) {

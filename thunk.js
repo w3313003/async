@@ -1,12 +1,7 @@
 const path = require("path");
 const fs = require("fs");
-
 const { slice } = Array.prototype;
 
-/**
- * 
- * @param {*} fn 
- */
 const Thunkify = function(fn) {
     return function() {
         const args = Reflect.apply(slice, arguments, []);
@@ -29,12 +24,19 @@ const Thunkify = function(fn) {
 };
 const readFileThunk = Thunkify(fs.readFile);
 const gen = function* () {
-    let r1 = yield readFileThunk(path.join(__dirname, "1.txt"));
-    console.log(r1.toString());
-    let r2 = yield readFileThunk(path.join(__dirname, "2.txt"));
-    console.log(r2.toString());
+    let r1 = yield readFileThunk(path.join(__dirname, "1.txt"), "utf-8");
+    console.log(r1);
+    let r2 = yield readFileThunk(path.join(__dirname, "2.txt"), "utf-8");
+    console.log(r2);
 };
-
+// 手动调用 next只能接收data作为唯一参数
+// const iter = gen();
+// iter.next().value((err, data) => {
+//     if(err) return err;
+//     iter.next(data).value((err, data) => {
+//         iter.next(data)
+//     })
+// })
 function runGen(gen) {
     const iter = gen();
     function next(err, data) {
