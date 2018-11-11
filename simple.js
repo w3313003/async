@@ -45,7 +45,21 @@ run(generator)
 //     });
 // });
 
-
+function thunk(fn) {
+    return function() {
+        const args = Array.prototype.slice.call(arguments);
+        const ctx = this;
+        return function(cb) {
+            let called = false;
+            args.push(function() {
+                if(called) return;
+                called = true;
+                cb.apply(ctx, arguments)
+            });
+            return fn.apply(ctx, args);
+        }
+    }
+} 
 
 
 const Thunk = function (fn) {
@@ -67,3 +81,10 @@ function test(name, age, callback) {
 };
 const testThunk = Thunk(test);
 testThunk(1,2)((a, b) => console.log(a, b))
+var obj = {
+    a: [1, 2, 3]
+};
+var c = obj.a;
+const v = {};
+v.c = c;
+console.log(obj.a === v.c)

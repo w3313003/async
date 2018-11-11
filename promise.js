@@ -37,4 +37,13 @@ function runGen(gen) {
     };
     next();
 };
-runGen(generator)
+runGen(generator);
+
+
+function* gen() {
+    const a = yield 4;
+    console.log(a);
+}
+const it = gen();
+console.log(it.next());
+it.next(3)
